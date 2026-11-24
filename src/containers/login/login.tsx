@@ -1,7 +1,7 @@
 import { UserCircle, LockCircle } from "reicon-react";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { loginApi } from "../../services/loginApi";
+import { api } from "../../services/api.ts";
 import "./login.css";
 
 function Login() {
@@ -12,7 +12,7 @@ function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const { data: token } = await loginApi.post("/app/login", {
+      const { data: token } = await api.post("/app/login", {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       });
