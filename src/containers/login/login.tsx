@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { api } from "../../services/api.ts";
 import "./login.css";
+import axios from "axios";
 
 function Login() {
   const passwordRef = useRef();
@@ -12,17 +13,20 @@ function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const { data: token } = await api.post("/app/login", {
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
+      await api.post("/app/login", {
+        email: emailRef.current?.value,
+        password: passwordRef.current?.value,
       });
-      cookieStore.set("token", token);
       console.log("Login OK!");
       navigate("/app/dashboard");
     } catch (error) {
-      console.error("Login Error!", error);
-    }    
-  }
+      if (axios.isAxiosError(error)) {
+        console.log("Login Error:", error.response?.data);
+      } else {
+        console.log("Login Error:", error);
+      };
+    };
+  };
 
   return (
     <>
